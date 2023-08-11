@@ -3,6 +3,9 @@ document.addEventListener("DOMContentLoaded", function() {
     var videoPlayer = document.getElementById("videoPlayer");
     var addLocalVideoButton = document.getElementById("addLocalVideo");
     var fileInput = document.getElementById("fileInput");
+    var volumeSlider = document.getElementById("volumeSlider");
+
+    var socket = io(); // Conectar al servidor de WebSocket
 
     loadButton.addEventListener("click", function() {
         cargarVideo();
@@ -40,6 +43,18 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
+    // Actualizar el volumen del reproductor local cuando cambie el deslizador de volumen
+    volumeSlider.addEventListener("input", function() {
+        var newVolume = parseFloat(volumeSlider.value);
+        videoPlayer.volume = newVolume;
+        socket.emit('changeVolume', { volume: newVolume });
+    });
+
+    socket.on('updateVolume', function(data) {
+        videoPlayer.volume = data.volume;
+        volumeSlider.value = data.volume;
+    });
+
     function obtenerIdDeVideo(url) {
         var regExp = /^.*(youtu.be\/|v\/|e\/|u\/\w+\/|embed\/|v=)([^#\\&\\?]*).*/;
         var match = url.match(regExp);
@@ -50,4 +65,3 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 });
-
