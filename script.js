@@ -2,26 +2,98 @@ document.addEventListener("DOMContentLoaded", function() {
     var loadButton = document.getElementById("loadButton");
     var videoPlayer = document.getElementById("videoPlayer");
     var addLocalVideoButton = document.getElementById("addLocalVideo");
+    var addLocalImageButton = document.getElementById("addLocalImage");
     var fileInput = document.getElementById("fileInput");
     var volumeSlider = document.getElementById("volumeSlider");
-
-    var socket = io(); // Conectar al servidor de WebSocket
+    var imageContainer = document.getElementById("imageContainer");
+    var prevButton = document.getElementById("prevButton");
+    var nextButton = document.getElementById("nextButton");
+    var deleteButton = document.getElementById("deleteButton");
+    var socket = io();
+    var images = [];
+    var currentImageIndex = -1;
 
     loadButton.addEventListener("click", function() {
         cargarVideo();
     });
 
     addLocalVideoButton.addEventListener("click", function() {
+        fileInput.accept = "video/*";
+        fileInput.click();
+    });
+
+    addLocalImageButton.addEventListener("click", function() {
+        fileInput.accept = "image/*";
         fileInput.click();
     });
 
     fileInput.addEventListener("change", function(event) {
         var selectedFile = event.target.files[0];
         if (selectedFile) {
-            videoPlayer.src = URL.createObjectURL(selectedFile);
-            videoPlayer.play();
+            if (selectedFile.type.startsWith('video/')) {
+                videoPlayer.style.display = "block";
+                videoPlayer.src = URL.createObjectURL(selectedFile);
+                videoPlayer.play();
+                imageContainer.innerHTML = '';
+                socket.emit('changeImage', -1); 
+            } else if (selectedFile.type.startsWith('image/')) {
+                videoPlayer.style.display = "none";
+                images.push(selectedFile);
+                currentImageIndex = images.length - 1;
+                mostrarImagen(currentImageIndex);
+                socket.emit('addImage', images[currentImageIndex]);
+                socket.emit('changeImage', currentImageIndex);
+            } else {
+                alert("El formato de archivo no es compatible. Por favor selecciona un archivo de video o imagen.");
+            }
         }
     });
+
+    prevButton.addEventListener("click", function() {
+        showImage(-1);
+    });
+
+    nextButton.addEventListener("click", function() {
+        showImage(1);
+    });
+
+    deleteButton.addEventListener("click", function() {
+        eliminarImagen(currentImageIndex);
+    });
+
+    function eliminarImagen(index) {
+        if (index >= 0 && index < images.length) {
+            images.splice(index, 1);
+            if (images.length === 0) {
+                imageContainer.innerHTML = '';
+                videoPlayer.style.display = "block";
+                socket.emit('changeImage', -1); 
+            } else {
+                currentImageIndex = Math.min(currentImageIndex, images.length - 1);
+                mostrarImagen(currentImageIndex);
+                socket.emit('deleteImage', index); 
+                socket.emit('changeImage', currentImageIndex);
+            }
+        }
+    }
+
+    function showImage(step) {
+        if (images.length === 0) {
+            return;
+        }
+        currentImageIndex = (currentImageIndex + step + images.length) % images.length;
+        mostrarImagen(currentImageIndex);
+        socket.emit('changeImage', currentImageIndex);
+    }
+
+    function mostrarImagen(index) {
+        var image = new Image();
+        image.src = URL.createObjectURL(images[index]);
+        image.onload = function() {
+            imageContainer.innerHTML = '';
+            imageContainer.appendChild(image);
+        };
+    }
 
     function cargarVideo() {
         var input = document.getElementById("videoInput").value;
@@ -30,7 +102,10 @@ document.addEventListener("DOMContentLoaded", function() {
             if (input.includes("youtube.com") || input.includes("youtu.be")) {
                 var videoId = obtenerIdDeVideo(input);
                 if (videoId) {
+                    videoPlayer.style.display = "block";
                     videoPlayer.src = `https://www.youtube.com/embed/${videoId}`;
+                    imageContainer.innerHTML = '';
+                    socket.emit('changeImage', -1); 
                 } else {
                     alert("URL de video de YouTube no válida.");
                 }
@@ -38,12 +113,14 @@ document.addEventListener("DOMContentLoaded", function() {
                 alert("Por favor, ingresa la URL completa de YouTube.");
             }
         } else {
+            videoPlayer.style.display = "block";
             videoPlayer.src = input;
             videoPlayer.play();
+            imageContainer.innerHTML = '';
+            socket.emit('changeImage', -1); 
         }
     }
 
-    // Actualizar el volumen del reproductor local cuando cambie el deslizador de volumen
     volumeSlider.addEventListener("input", function() {
         var newVolume = parseFloat(volumeSlider.value);
         videoPlayer.volume = newVolume;
@@ -53,6 +130,38 @@ document.addEventListener("DOMContentLoaded", function() {
     socket.on('updateVolume', function(data) {
         videoPlayer.volume = data.volume;
         volumeSlider.value = data.volume;
+    });
+
+    socket.on('updateImages', function(updatedImages) {
+        images = updatedImages;
+        if (images.length === 0) {
+            imageContainer.innerHTML = '';
+            videoPlayer.style.display = "block";
+        } else {
+            currentImageIndex = Math.min(currentImageIndex, images.length - 1);
+            mostrarImagen(currentImageIndex);
+        }
+    });
+
+    socket.on('updateCurrentImage', function(updatedIndex) {
+        currentImageIndex = updatedIndex;
+        mostrarImagen(currentImageIndex);
+    });
+
+    socket.on('deleteImage', function(deletedIndex) {
+        images.splice(deletedIndex, 1);
+        if (images.length === 0) {
+            imageContainer.innerHTML = '';
+            videoPlayer.style.display = "block";
+        } else {
+            currentImageIndex = Math.min(currentImageIndex, images.length - 1);
+            mostrarImagen(currentImageIndex);
+        }
+    });
+
+    videoPlayer.addEventListener("volumechange", function() {
+        var newVolume = videoPlayer.volume;
+        socket.emit('changeVolume', { volume: newVolume });
     });
 
     function obtenerIdDeVideo(url) {

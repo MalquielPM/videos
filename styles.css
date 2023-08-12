@@ -65,6 +65,38 @@ input[type="text"] {
     border-radius: 10px;
 }
 
+/* Agregar estilos para la imagen */
+.video-container img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+/* Estilos para los botones de navegación */
+.button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.button-container button {
+    margin: 0 10px;
+    padding: 8px 16px;
+    background-color: #1e385f;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.button-container button:hover {
+    background-color: #17305a;
+}
+
 @media (max-width: 600px) {
     .container {
         padding: 10px;
@@ -84,5 +116,10 @@ input[type="text"] {
     
     .video-container {
         padding-bottom: 30%;
+    }
+    
+    /* Estilos para los botones de navegación en pantalla pequeña */
+    .button-container button {
+        padding: 6px 12px;
     }
 }

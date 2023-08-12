@@ -3,18 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reproductor de Video</title>
+    <title>Reproductor Multimedia</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
-        <h1>Reproductor de Video</h1>
+        <h1>Reproductor Multimedia</h1>
         <input type="text" id="videoInput" placeholder="URL del Video">
         <button id="loadButton">Cargar Video</button>
         <button id="addLocalVideo">Añadir Video Local</button>
-        <input type="file" id="fileInput" style="display: none;">
+        <button id="addLocalImage">Añadir Imagen Local</button>
+        <input type="file" id="fileInput" accept="video/*,image/*" style="display: none;">
         <div class="video-container">
             <iframe id="videoPlayer" width="560" height="315" src="" frameborder="0" allowfullscreen></iframe>
+            <div id="imageContainer"></div> 
+        </div>
+        <div class="button-container">
+            <button id="prevButton">Anterior</button>
+            <button id="nextButton">Siguiente</button>
+            <button id="deleteButton">Eliminar</button> 
         </div>
         <input type="range" id="volumeSlider" min="0" max="1" step="0.01">
     </div>
@@ -23,4 +30,5 @@
     <script src="script.js"></script>
 </body>
 </html>
+
 
