@@ -1,19 +1,19 @@
 const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
+const path = require('path');
 
 const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);
 
+const host = '192.168.3.187';
 const port = process.env.PORT || 3000;
 
 let images = [];
 let currentImageIndex = -1;
 
 io.on('connection', (socket) => {
-    console.log('Usuario conectado:', socket.id);
-
     socket.on('changeVolume', (data) => {
         socket.broadcast.emit('updateVolume', data);
     });
@@ -46,6 +46,13 @@ io.on('connection', (socket) => {
     });
 });
 
-server.listen(port, () => {
-    console.log(`Servidor escuchando en el puerto ${port}`);
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname,'index.html'));
 });
+
+server.listen(port, host, () => {
+    console.log(`Servidor escuchando en el host ${host} y puerto ${port}`);
+});
+

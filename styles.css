@@ -56,7 +56,8 @@ input[type="text"] {
     background-color: #ff8400; 
 }
 
-.video-container iframe {
+.video-container iframe,
+.video-container img {
     position: absolute;
     top: 0;
     left: 0;
@@ -65,17 +66,6 @@ input[type="text"] {
     border-radius: 10px;
 }
 
-/* Agregar estilos para la imagen */
-.video-container img {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: auto;
-    border-radius: 10px;
-}
-
-/* Estilos para los botones de navegación */
 .button-container {
     display: flex;
     justify-content: center;
@@ -106,10 +96,6 @@ input[type="text"] {
         width: 100%;
     }
     
-    .button-container {
-        margin-top: 10px;
-    }
-    
     .load-button {
         padding: 8px 16px;
     }
@@ -118,8 +104,14 @@ input[type="text"] {
         padding-bottom: 30%;
     }
     
-    /* Estilos para los botones de navegación en pantalla pequeña */
+    .button-container {
+        flex-direction: column; 
+        align-items: center; 
+        margin-top: 10px;
+    }
+    
     .button-container button {
+        margin: 5px; 
         padding: 6px 12px;
     }
 }
