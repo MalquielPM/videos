@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Página de inicio de sesión</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .container {
+      margin-top: 100px;
+      max-width: 400px;
+      background-color: white;
+      border-radius: 8px;
+      padding: 30px;
+      box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+      color: #343a40;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-control {
+      border: 1px solid #ced4da;
+      border-radius: 4px;
+      padding: 10px;
+    }
+    .btn-primary {
+      background-color: #007bff;
+      border-color: #007bff;
+      transition: background-color 0.3s, border-color 0.3s;
+    }
+    .btn-primary:hover {
+      background-color: #0056b3;
+      border-color: #0056b3;
+    }
+    a {
+      color: #007bff;
+      transition: color 0.3s;
+    }
+    a:hover {
+      color: #0056b3;
+    }
+    .symbol {
+      font-size: 24px;
+      margin-right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-12">
+        <form action="#" method="POST" onsubmit="return validarFormulario(event);">
+          <h2 class="mt-5 mb-4"><span class="symbol">🔐</span> Iniciar sesión</h2>
+          <div class="form-group">
+            <input type="email" class="form-control" name="correo_user" id="correo_user" placeholder="📧 Correo electrónico" required>
+            <small id="correoError" class="text-danger"></small>
+          </div>
+          <div class="form-group">
+            <input type="password" class="form-control" name="contrasena_user" id="contrasena_user" placeholder="🔒 Contraseña" required>
+            <small id="contrasenaError" class="text-danger"></small>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block" name="login"><span class="symbol">🚀</span> Iniciar sesión</button>
+          <div id="mensajeResultado" class="mt-3 text-center"></div>
+
+        </form>
+        <p class="mt-3 text-center">¿No tienes una cuenta? <a href="registro.html"><span class="symbol">✏️</span> Regístrate aquí</a></p>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script>
+    function validarFormulario(event) {
+      event.preventDefault();
+    
+      var correo = document.getElementById("correo_user").value;
+      var contrasena = document.getElementById("contrasena_user").value;
+      var correoError = document.getElementById("correoError");
+      var contrasenaError = document.getElementById("contrasenaError");
+      var mensajeResultado = document.getElementById("mensajeResultado");
+    
+      var correoRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!correoRegex.test(correo)) {
+        correoError.textContent = "Ingresa un correo electrónico válido";
+        mensajeResultado.textContent = "";
+        return false;
+      } else {
+        correoError.textContent = "";
+      }
+    
+      if (contrasena.length < 6) {
+        contrasenaError.textContent = "La contraseña debe tener al menos 6 caracteres";
+        mensajeResultado.textContent = "";
+        return false;
+      } else {
+        contrasenaError.textContent = "";
+      }
+    
+      // Simulando una sesión exitosa
+      mensajeResultado.textContent = "Inicio de sesión exitoso. Redirigiendo...";
+      setTimeout(function () {
+        window.location.href = "index.html"; // Redirige al usuario a index.html después de 2 segundos
+      }, 2000); // Cambia este valor si deseas que la redirección ocurra más rápido o más lento
+    
+      return true;
+    }
+    
+  </script>
+</body>
+</html>
