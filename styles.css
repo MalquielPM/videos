@@ -2,28 +2,39 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #1e385f;
+    background-color: #16164b;
+    background-image: url('https://us.123rf.com/450wm/nachomena/nachomena1706/nachomena170600185/79876100-resumen-textura-azul-y-fondo-para-dise%C3%B1adores-fondo-de-papel-vintage-textura-azul-rugosa-de-papel.jpg?ver=6'); 
+    background-size: cover; 
+    background-repeat: no-repeat;
+    background-attachment: fixed; 
 }
+
 
 .container {
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
     text-align: center;
-    background-color: #ffffff;
+    background-color: #4610b9;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-image: url('https://us.123rf.com/450wm/foxaon/foxaon1603/foxaon160300172/53722676-fondo-de-la-pared-azul-del-grunge-o-textura.jpg?ver=6');
+    background-size: cover;
+    background-repeat: no-repeat;
+    border: 5px solid #070404;
 }
 
+
+
 h1 {
-    color: #333;
+    color: #f3efef;
 }
 
 input[type="text"] {
     width: 80%;
     padding: 10px;
     margin-top: 10px;
-    border: 1px solid #ccc;
+    border: 1px solid #f8f6f6;
     border-radius: 5px;
 }
 
@@ -35,7 +46,7 @@ input[type="text"] {
     display: inline-block;
     padding: 10px 20px;
     background-color: #1e385f;
-    color: #fff;
+    color: #171010;
     border: none;
     cursor: pointer;
     border-radius: 5px;
@@ -53,7 +64,7 @@ input[type="text"] {
     height: 0;
     overflow: hidden;
     border-radius: 10px;
-    background-color: #ff8400; 
+    background-color: #1a1714; 
 }
 
 .video-container iframe,
