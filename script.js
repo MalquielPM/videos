@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", function() {
         fileInput.click();
     });
 
-    fileInput.addEventListener("change", function(event) {
+  fileInput.addEventListener("change", function(event) {
         var selectedFile = event.target.files[0];
         if (selectedFile) {
             if (selectedFile.type.startsWith('video/')) {
@@ -48,7 +48,6 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         }
     });
-
     prevButton.addEventListener("click", function() {
         showImage(-1);
     });
@@ -61,7 +60,15 @@ document.addEventListener("DOMContentLoaded", function() {
         eliminarImagen(currentImageIndex);
     });
 
-    function eliminarImagen(index) {
+    document.addEventListener("keydown", function(event) {
+        if (event.key === "ArrowLeft") {
+            showImage(-1);
+        } else if (event.key === "ArrowRight") {
+            showImage(1);
+        }
+    });
+
+   function eliminarImagen(index) {
         if (index >= 0 && index < images.length) {
             images.splice(index, 1);
             if (images.length === 0) {
@@ -77,7 +84,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
-    function showImage(step) {
+      function showImage(step) {
         if (images.length === 0) {
             return;
         }
@@ -95,7 +102,46 @@ document.addEventListener("DOMContentLoaded", function() {
         };
     }
 
-    function cargarVideo() {
+    function mostrarImagen(index) {
+        var fullscreenImage = document.getElementById("fullscreenImage");
+        fullscreenImage.src = URL.createObjectURL(images[index]);
+    
+        var fullscreenButton = document.getElementById("fullscreenButton");
+        fullscreenButton.addEventListener("click", function() {
+            if (fullscreenImage.requestFullscreen) {
+                fullscreenImage.requestFullscreen();
+            } else if (fullscreenImage.mozRequestFullScreen) {
+                fullscreenImage.mozRequestFullScreen();
+            } else if (fullscreenImage.webkitRequestFullscreen) {
+                fullscreenImage.webkitRequestFullscreen();
+            } else if (fullscreenImage.msRequestFullscreen) {
+                fullscreenImage.msRequestFullscreen();
+            }
+        });
+    
+        if ("ontouchstart" in document.documentElement) {
+            var startX;
+            fullscreenImage.addEventListener("touchstart", function(event) {
+                startX = event.touches[0].clientX;
+            });
+    
+            fullscreenImage.addEventListener("touchmove", function(event) {
+                var currentX = event.touches[0].clientX;
+                var diffX = currentX - startX;
+    
+                if (diffX > 0) {
+                    showImage(-1); 
+                } else if (diffX < 0) {
+                    showImage(1); 
+                }
+                
+                startX = currentX;
+            });
+        }
+    }
+    
+    
+   function cargarVideo() {
         var input = document.getElementById("videoInput").value;
 
         if (input.includes("http")) {
@@ -121,7 +167,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
-    volumeSlider.addEventListener("input", function() {
+ volumeSlider.addEventListener("input", function() {
         var newVolume = parseFloat(volumeSlider.value);
         videoPlayer.volume = newVolume;
         socket.emit('changeVolume', { volume: newVolume });
@@ -132,7 +178,7 @@ document.addEventListener("DOMContentLoaded", function() {
         volumeSlider.value = data.volume;
     });
 
-    socket.on('updateImages', function(updatedImages) {
+      socket.on('updateImages', function(updatedImages) {
         images = updatedImages;
         if (images.length === 0) {
             imageContainer.innerHTML = '';
@@ -143,12 +189,12 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 
-    socket.on('updateCurrentImage', function(updatedIndex) {
+   socket.on('updateCurrentImage', function(updatedIndex) {
         currentImageIndex = updatedIndex;
         mostrarImagen(currentImageIndex);
     });
 
-    socket.on('deleteImage', function(deletedIndex) {
+      socket.on('deleteImage', function(deletedIndex) {
         images.splice(deletedIndex, 1);
         if (images.length === 0) {
             imageContainer.innerHTML = '';

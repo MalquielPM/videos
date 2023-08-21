@@ -126,3 +126,19 @@ input[type="text"] {
         padding: 6px 12px;
     }
 }
+.fullscreen-button {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    padding: 8px 16px;
+    background-color: #1e385f;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.fullscreen-button:hover {
+    background-color: #17305a;
+}

@@ -16,16 +16,19 @@
         <input type="file" id="fileInput" accept="video/*,image/*" style="display: none;">
         <div class="video-container">
             <iframe id="videoPlayer" width="560" height="315" src="" frameborder="0" allowfullscreen></iframe>
-            <div id="imageContainer"></div> 
+            <div class="image-container">
+                <img id="fullscreenImage" src="" alt="Fullscreen Image">
+            </div>
+            <button id="fullscreenButton" class="fullscreen-button">Toggle Fullscreen</button>
         </div>
         <div class="button-container">
             <button id="prevButton">Anterior</button>
             <button id="nextButton">Siguiente</button>
-            <button id="deleteButton">Eliminar</button> 
+            <button id="deleteButton">Eliminar</button>
         </div>
         <input type="range" id="volumeSlider" min="0" max="1" step="0.01">
     </div>
-    
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
     <script src="script.js"></script>
 </body>
