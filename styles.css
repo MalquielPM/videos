@@ -9,7 +9,6 @@ body {
     background-attachment: fixed; 
 }
 
-
 .container {
     max-width: 800px;
     margin: 0 auto;
@@ -23,8 +22,6 @@ body {
     background-repeat: no-repeat;
     border: 5px solid #070404;
 }
-
-
 
 h1 {
     color: #f3efef;
@@ -126,6 +123,7 @@ input[type="text"] {
         padding: 6px 12px;
     }
 }
+
 .fullscreen-button {
     position: absolute;
     bottom: 10px;
@@ -141,4 +139,33 @@ input[type="text"] {
 
 .fullscreen-button:hover {
     background-color: #17305a;
+}
+
+.hidden {
+    display: none;
+}
+
+.visible {
+    display: block;
+    z-index: 1;
+}
+
+.image-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 200px; /* Cambia este valor al tamaño deseado */
+    height: 150px; /* Cambia este valor al tamaño deseado */
+    background-color: rgba(0, 0, 0, 0.9);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+}
+
+.image-container img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
 }
